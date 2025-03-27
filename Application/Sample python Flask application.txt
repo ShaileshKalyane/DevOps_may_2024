@@ -1,0 +1,53 @@
+Sample python Flask application 
+
+STEP 1:  Install python3 and pip3 
+
+sudo apt update -y
+sudo apt install python3 python3-pip -y
+pip3 install flask
+Note: If we get "error: externally-managed-environment" -> Run below command
+
+sudo rm /usr/lib/python3.12/EXTERNALLY-MANAGED
+
+STEP 2:  Create flask app in ec2 (vi app.py)
+
+from flask import Flask 
+import socket, json 
+
+app = Flask(__name__)
+
+@app.route('/')
+def print_ip():
+    hostname = socket.gethostname()
+    get_ip = socket.gethostbyname(hostname)
+    return get_ip
+  
+@app.route('/health')
+def health_check():
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+
+@app.route('/name')
+def print_name():
+    return 'Harsha Jain'
+
+@app.route('/error')
+def print_error():
+    print('500 error')
+    sum = 0/100
+    return sum
+
+if __name__ == '__main__':
+  app.run(host="0.0.0.0", port="8080")
+STEP 3:  Run the flask app.py
+
+python3 app.py
+
+STEP 4:  Access the flask app
+
+To access the flask app
+
+Open 8080 port in ec2 security group
+<ec2_public_ip_address>:<port>/<path>
+ex: 172.31.10.232:8080 - Request root of application which prints ip of ec2 
+
+      172.31.10.232:8080/name - Request /name path which prints 'Harsha Jain'

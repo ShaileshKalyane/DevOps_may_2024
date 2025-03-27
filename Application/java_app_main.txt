@@ -1,0 +1,41 @@
+STEP 1: Update the ec2 and Install Java, Maven, Tomcat10
+
+# Update new Ubuntu ec2 machine
+sudo apt udpate 
+
+# Install java development kit 
+sudo apt install -y openjdk-21-jdk
+
+# Install maven
+sudo apt install -y maven 
+
+# Install Apache Tomcat10
+sudo apt install tomcat10 tomcat10-admin -y
+
+#To check Tomcat running 
+sudo systemctl status tomcat10
+STEP 2: Add user to tomcat10 to access Manager GUI Pannel
+
+sudo vi /etc/tomcat10/tomcat-users.xml
+
+# Add below line inside <tomcat-users> ..... </tomcat-users>
+  <role rolename="manager-gui"/>
+  <role rolename="admin-gui"/>
+  <user username="admin" password="password" roles="manager-gui,admin-gui"/>
+ 
+STEP 3: Create your own github repo with the java codebase which is in Applications/java_app.zip (https://materials.itdefined.org)
+
+STEP 4: Build the calculator.war which you will get inside target/calculator.war after running below maven command
+
+mvn clean package 
+
+Note: Run the above maven command in same directory where pom.xml is present 
+
+STEP 5: Deploy the calculator.war manually for now through Manager GUI 
+
+Access the Tomcat Manage GUI: <ec2_public_ip_address>:8080/manager
+User the username and password which we configure in STEP 2
+Upload the war file
+ 
+
+STEP 6: Access the calculator app <ec2_public_ip_address>:8080/calculator
